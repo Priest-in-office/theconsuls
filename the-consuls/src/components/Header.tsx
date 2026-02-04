@@ -1,6 +1,18 @@
 import logo from '../images/IMG_1415.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const navigate = useNavigate();
+
+  const isLoggedIn = false;
+
+  const handleClick = () => {
+    if (isLoggedIn) {
+      navigate('/live')
+    } else {
+      navigate('/signup')
+    }
+  }
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass">
       <div className="flex items-center p-4 justify-between max-w-md mx-auto">
@@ -10,7 +22,7 @@ export default function Header() {
           </div>
           <h2 className="text-white text-lg font-extrabold leading-tight tracking-tighter">The Consuls</h2>
         </div>
-        <button className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all">Join</button>
+        <button onClick={handleClick} className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all">Join</button>
       </div>
     </header>
   )

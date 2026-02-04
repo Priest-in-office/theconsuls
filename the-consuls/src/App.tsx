@@ -1,23 +1,20 @@
+import { Routes, Route } from 'react-router-dom'
 import './App.css'
-import Layout from './components/Layout'
-import Header from './components/Header'
-import Hero from './components/Hero'
-import Grid from './components/Grid'
-import Service from './components/Service'
-import Location from './components/Location'
-import Footer from './components/Footer'
+import Home from './pages/Home'
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
+import Live from './pages/Live'
+
 
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
-      <Layout>
-        <Hero />
-        <Grid />
-        <Service />
-        <Location /> 
-      </Layout>
-      <Footer />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/live" element={<Live />} />
+      </Routes>
     </div>
   )
 }

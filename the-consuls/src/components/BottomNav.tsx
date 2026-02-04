@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function BottomNav(){
+export default function BottomNav() {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,26 +23,42 @@ export default function BottomNav(){
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-    }
+    };
   }, [lastScrollY]);
 
+  const navItems = [
+    { path: '/', icon: 'home', label: 'Home' },
+    { path: '/groups', icon: 'group', label: 'Groups' },
+    { path: '/live', icon: 'play_circle', label: 'Live' },
+    { path: '/profile', icon: 'person', label: 'Profile' },
+  ];
 
   return (
-    <nav className={`fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[360px] z-50 transition-transform duration-300 ${isVisible ? 'translate-y-0' : 'translate-y-24'}`}>
+    <nav 
+      className={`fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-[360px] z-50 transition-transform duration-300 ${
+        isVisible ? 'translate-y-0' : 'translate-y-24'
+      }`}
+    >
       <div className="glass rounded-full px-6 py-4 flex items-center justify-between shadow-2xl shadow-black/50">
-        <button className="text-primary flex flex-col items-center transition-transform active:scale-90">
-        <span className="material-symbols-outlined text-2xl" style={{fontVariationSettings: "'FILL' 1"}}>home</span>
-        </button>
-        <button className="text-gray-400 hover:text-white flex flex-col items-center transition-transform active:scale-90">
-        <span className="material-symbols-outlined text-2xl">group</span>
-        </button>
-        <button className="text-gray-400 hover:text-white flex flex-col items-center transition-transform active:scale-90">
-        <span className="material-symbols-outlined text-2xl">play_circle</span>
-        </button>
-        <button className="text-gray-400 hover:text-white flex flex-col items-center transition-transform active:scale-90">
-        <span className="material-symbols-outlined text-2xl">person</span>
-        </button>
+        {navItems.map((item) => (
+          <button 
+            key={item.path}
+            onClick={() => navigate(item.path)}
+            className={`flex flex-col items-center transition-transform active:scale-90 ${
+              location.pathname === item.path ? 'text-primary' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            <span 
+              className="material-symbols-outlined text-2xl" 
+              style={{
+                fontVariationSettings: location.pathname === item.path ? "'FILL' 1" : "'FILL' 0",
+              }}
+            >
+              {item.icon}
+            </span>
+          </button>
+        ))}
       </div>
     </nav>
-  )
+  );
 }

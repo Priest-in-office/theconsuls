@@ -36,6 +36,14 @@
     margin-top: 2rem;
 }
 
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
 body {
   min-height: max(884px, 100dvh);
   @apply bg-background-light dark:bg-background-dark font-display text-white selection:bg-primary/30;

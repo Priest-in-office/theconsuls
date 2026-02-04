@@ -1,6 +1,18 @@
 import testImage from '../images/test-image.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function Hero() {
+  const navigate = useNavigate();
+  const isLoggedIn = true;
+
+  const handleWatchLive = () => {
+    if (isLoggedIn) {
+      navigate('/live')
+    } else {
+      navigate('/signup')
+    }
+  }
+
   return (
     <section className="mt-4">
       <div className="relative overflow-hidden rounded-xl">
@@ -23,7 +35,7 @@ export default function Hero() {
               <span className="text-primary font-bold">Series: THE NEW ERA.</span>
             </p>
           </div>
-          <button className="pulse-live flex items-center gap-3 bg-primary text-white rounded-full py-4 px-8 font-extrabold text-base tracking-wide uppercase transition-transform active:scale-95">
+          <button onClick={handleWatchLive} className="pulse-live flex items-center gap-3 bg-primary text-white rounded-full py-4 px-8 font-extrabold text-base tracking-wide uppercase transition-transform active:scale-95">
             <span className="material-symbols-outlined">play_circle</span>
             Watch Live
           </button>

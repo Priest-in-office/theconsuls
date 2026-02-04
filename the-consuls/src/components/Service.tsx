@@ -1,7 +1,7 @@
 export default function ServiceTimes() {
   return (
     <section className="mt-12 mb-8">
-      <div className="flex items-end justify-between mb-6">
+      <div className="flex items-end justify-between mb-6 px-2">
         <div className="h-1 flex-1 bg-primary/20 mr-4 mb-2 rounded-full"></div>
         <h2 className="text-white text-3xl font-black tracking-tighter uppercase italic leading-none">Pull Up</h2>
       </div>
