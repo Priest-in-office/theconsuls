@@ -1,10 +1,10 @@
-import testImage from '../assets/test-image.jpg';
+import testImage from '../images/test-image.png';
 
 export default function Hero() {
   return (
     <section className="mt-4">
       <div className="relative overflow-hidden rounded-xl">
-        <div className="flex min-h-130 flex-col gap-6 bg-cover bg-center bg-no-repeat items-start justify-end px-6 pb-12" 
+        <div className="flex min-h-[520px] flex-col gap-6 bg-cover bg-center bg-no-repeat items-start justify-end px-6 pb-12 " 
         data-alt="Vibrant worship concert with neon lights" 
         style={{
           backgroundImage: 
@@ -18,8 +18,8 @@ export default function Hero() {
             <span className="text-[10px] font-black tracking-widest uppercase">Live Now</span>
           </div>
           <div className="flex flex-col gap-3">
-            <h1 className="text-white text-5xl font-black leading-[0.9] tracking-tighter uppercase italic">Faith.<br/>Vibes.<br/>Community.</h1>
-            <p className="text-gray-300 text-sm font-medium max-w-[80%] leading-relaxed">Experience worship like never before. <br/>
+            <h1 className="text-white text-5xl font-black leading-[0.9] tracking-tighter uppercase italic text-left">Welcome<br/>To<br/>CE Omole Teens Church</h1>
+            <p className="text-gray-300 text-sm font-medium max-w-[80%] leading-relaxed text-left">Experience worship like never before. <br/>
               <span className="text-primary font-bold">Series: THE NEW ERA.</span>
             </p>
           </div>

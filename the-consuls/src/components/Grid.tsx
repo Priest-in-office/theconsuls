@@ -1,7 +1,7 @@
-import testImage2 from '../assets/test-image2.jpg';
-import testImage3 from '../assets/test-image3.jpg';
-import testImage4 from '../assets/test-image4.jpg';
-import testImage5 from '../assets/test-image5.jpg';
+import testImage2 from '../images/test-image.png';
+import testImage3 from '../images/test-image3.png';
+import testImage4 from '../images/test-image4.png';
+import testImage5 from '../images/test-image5.png';
 
 export default function Grid() {
   return (
@@ -13,7 +13,7 @@ export default function Grid() {
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-4">
           <div 
-            className="bg-cover bg-center flex flex-col gap-3 rounded-2xl justify-end p-4 aspect-3/4 group relative overflow-hidden" 
+            className="bg-cover bg-center flex flex-col gap-3 rounded-2xl justify-end p-4 aspect-[3/4] group relative overflow-hidden" 
             data-alt="Group of teens laughing together" 
             style={{
               backgroundImage: `linear-gradient(0deg, rgba(16,22,34,0.8) 0%, rgba(0,0,0,0) 50%), url(${testImage2})`
@@ -43,7 +43,7 @@ export default function Grid() {
             <p className="text-white text-lg font-black leading-tight z-10 uppercase italic">Groups</p>
           </div>
           <div 
-            className="bg-cover bg-center flex flex-col gap-3 rounded-2xl justify-end p-4 aspect-3/4 relative overflow-hidden" 
+            className="bg-cover bg-center flex flex-col gap-3 rounded-2xl justify-end p-4 aspect-[3/4] relative overflow-hidden" 
             data-alt="Teenager speaking on stage" 
             style={{
               backgroundImage: `linear-gradient(0deg, rgba(16,22,34,0.8) 0%, rgba(0,0,0,0) 50%), url(${testImage5})`
