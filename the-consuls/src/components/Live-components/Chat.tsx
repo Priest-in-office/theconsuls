@@ -2,7 +2,7 @@ export default function Chat() {
   return (
     <div className="flex flex-col flex-1 bg-white/5 rounded-t-xl pt-0.5 mt-4 mx-0 border-x border-t border-white/10 min-h-[400px]">
       <div className="p-4 border-b border-white/10 flex justify-between items-center">
-        <span className="font-bold text-sm uppercase tracking-widest text-white/50">Community Chat</span>
+        <span className="font-bold text-sm uppercase tracking-widest text-white/50">Live Comments</span>
         <span className="material-symbols-outlined text-white/40">expand_more</span>
       </div>
       

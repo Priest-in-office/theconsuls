@@ -44,6 +44,14 @@
     scrollbar-width: none;
 }
 
+.gradient-bg {
+    background: linear-gradient(135deg, #2525f4 0%, #8b5cf6 100%);
+}
+
+.btn-gradient {
+    background: linear-gradient(90deg, #2525f4 0%, #7c3aed 100%);
+}
+
 body {
   min-height: max(884px, 100dvh);
   @apply bg-background-light dark:bg-background-dark font-display text-white selection:bg-primary/30;
