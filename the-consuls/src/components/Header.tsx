@@ -1,13 +1,13 @@
 import logo from '../images/IMG_1415.png';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './SignIn-Components/AuthContext';
 
 export default function Header() {
   const navigate = useNavigate();
-
-  const isLoggedIn = false;
+  const { user } = useAuth();
 
   const handleClick = () => {
-    if (isLoggedIn) {
+    if (user) {
       navigate('/live')
     } else {
       navigate('/signup')
@@ -22,7 +22,7 @@ export default function Header() {
           </div>
           <h2 className="text-white text-lg font-extrabold leading-tight tracking-tighter">The Consuls</h2>
         </div>
-        <button onClick={handleClick} className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all">Join</button>
+        <button onClick={handleClick} className="bg-primary hover:bg-primary/90 text-white px-5 py-2 rounded-full text-sm font-bold transition-all">{user ? "Watch Live" : "Join"}</button>
       </div>
     </header>
   )

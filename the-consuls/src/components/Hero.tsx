@@ -1,12 +1,13 @@
 import testImage from '../images/test-image.png';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from './SignIn-Components/AuthContext';
 
 export default function Hero() {
   const navigate = useNavigate();
-  const isLoggedIn = true;
+  const { user } = useAuth();
 
   const handleWatchLive = () => {
-    if (isLoggedIn) {
+    if (user) {
       navigate('/live')
     } else {
       navigate('/signup')

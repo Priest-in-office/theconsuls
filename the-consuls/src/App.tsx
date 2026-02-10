@@ -5,9 +5,20 @@ import SignUp from './pages/SignUp'
 import Live from './pages/Live'
 import Login from './pages/Login'
 import ForgotPassword from './pages/ForgotPassword'
+import { useAuth } from './components/SignIn-Components/AuthContext';
 
 
 function App() {
+  const { isAuthReady } = useAuth();
+
+  if (!isAuthReady) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background-dark">
+        <span className="material-symbols-outlined text-primary text-4xl animate-spin">progress_activity</span>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Routes>
@@ -18,7 +29,7 @@ function App() {
         <Route path="/live" element={<Live />} />
       </Routes>
     </div>
-  )
+  );
 }
 
 export default App

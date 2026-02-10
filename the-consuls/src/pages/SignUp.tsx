@@ -11,6 +11,23 @@ export default function Signup() {
   const navigate = useNavigate();
   const { signup, isLoading, error } = useAuth();
 
+  const handleSubmit = async () => {
+    if (!validate()) return;
+
+    try {
+      await signup({
+        name: values.name as string,
+        email: values.email as string,
+        password: values.password as string,
+        dateOfBirth: getDateAsISO("dob") || "", 
+      });
+
+      navigate("/login", {
+        state: { message: "Account created successfully! Please log in." }
+      })
+    } catch{}
+  };
+
   const { values, errors, setValue, validate, getDateAsISO } = useFormValidation(
     { name: "", email: "", password: "", confirmPassword: "", dob: { day: "", month: "", year: "" } },
     {
@@ -21,19 +38,6 @@ export default function Signup() {
       dob: { required: true, minAge: 13 },
     }
   );
-
-  const handleSubmit = async () => {
-    if (validate()) {
-      const dateOfBirth = getDateAsISO("dob");
-      await signup({
-        email: values.email as string,
-        password: values.password as string,
-        name: values.name as string,
-        dateOfBirth: dateOfBirth || "",
-      });
-      navigate("/");
-    }
-  };
 
   const handleGoogleLogin = () => {
     console.log("Google signup");
