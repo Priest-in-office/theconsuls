@@ -10,7 +10,7 @@ export default function SubmitButton({ text, isLoading, onClick }: SubmitButtonP
       <button 
         onClick={onClick} 
         disabled={isLoading} 
-        className="btn-gradient w-full h-14 rounded-full text-white font-bold text-lg shadow-lg shadow-primary/30 active:scale-[0.98] transition-transform"
+        className="btn-gradient w-full h-14 rounded-full text-black font-bold text-lg shadow-[0_0_20px_rgba(0,255,163,0.4)] hover:shadow-[0_0_30px_rgba(0,255,163,0.6)] active:scale-[0.98] transition-all"
       >
         {isLoading ? (
           <span className="material-symbols-outlined animate-spin">progress_activity</span>

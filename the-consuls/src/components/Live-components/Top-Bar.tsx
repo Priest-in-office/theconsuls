@@ -8,7 +8,7 @@ export default function TopBar() {
   }
 
   return (
-    <div className="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md pb-4 justify-between border-b border-white/5">
+    <div className="sticky top-0 z-50 flex items-center bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md p-4 justify-between border-b border-white/5">
       <div onClick={handleBackClick} className="text-white flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10">
         <span className="material-symbols-outlined">arrow_back_ios_new</span>
       </div>

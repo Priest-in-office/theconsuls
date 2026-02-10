@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { navItems } from '../config/navigation';
 
 export default function BottomNav() {
   const [isVisible, setIsVisible] = useState(true);
@@ -25,13 +26,6 @@ export default function BottomNav() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [lastScrollY]);
-
-  const navItems = [
-    { path: '/', icon: 'home', label: 'Home' },
-    { path: '/groups', icon: 'group', label: 'Groups' },
-    { path: '/live', icon: 'play_circle', label: 'Live' },
-    { path: '/profile', icon: 'person', label: 'Profile' },
-  ];
 
   return (
     <nav 

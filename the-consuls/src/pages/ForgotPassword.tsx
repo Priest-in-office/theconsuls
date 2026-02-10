@@ -88,19 +88,19 @@ export default function ForgotPassword() {
 
   return (
     <AuthLayout
-      title="Reset Your Password"
+      title="Forgot Password?"
       subtitle={step === "email" 
-        ? "Enter your email that you used to sign up" 
+        ? "No worries! Enter your email below and we'll send you a code to reset your password." 
         : "Check your inbox for the verification code."}
       badge="Password Recovery"
     >
       <h2 className="text-2xl font-bold text-[#111118] dark:text-white mb-2">
-        {step === "email" ? "Forgot Password?" : "Enter Verification Code"}
+        {step === "email" ? "" : "Enter Verification Code"}
       </h2>
       
       <p className="text-[#60608a] dark:text-gray-400 text-sm mb-8">
         {step === "email" 
-          ? "No worries! Enter your email below and we'll send you a code to reset your password."
+          ? ""
           : <>We've sent a 6-digit code to <span className="text-primary font-semibold">{userEmail}</span></>
         }
       </p>
