@@ -3,14 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { navItems } from '../config/navigation';
 import { useAuth } from './SignIn-Components/AuthContext';
 
-const { user } = useAuth();
 
-export default function BottomNav() {
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-  const navigate = useNavigate();
-  const location = useLocation();
-
+export default function BottomNav() { const { user } = useAuth(); const [isVisible, setIsVisible] = useState(true); const [lastScrollY, setLastScrollY] = useState(0); const navigate = useNavigate(); const location = useLocation();
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
