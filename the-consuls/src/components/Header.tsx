@@ -10,7 +10,7 @@ export default function Header() {
     if (user) {
       navigate('/live')
     } else {
-      navigate('/signup')
+      navigate('/login')
     }
   }
   return (

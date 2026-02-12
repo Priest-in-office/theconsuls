@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { navItems } from '../config/navigation';
+import { useAuth } from './SignIn-Components/AuthContext';
+
+const { user } = useAuth();
 
 export default function BottomNav() {
   const [isVisible, setIsVisible] = useState(true);
@@ -37,7 +40,7 @@ export default function BottomNav() {
         {navItems.map((item) => (
           <button 
             key={item.path}
-            onClick={() => navigate(item.path)}
+            onClick={() => user ? navigate(item.path) : navigate("/login")}
             className={`flex flex-col items-center transition-transform active:scale-90 ${
               location.pathname === item.path ? 'text-primary' : 'text-gray-400 hover:text-white'
             }`}
