@@ -6,6 +6,7 @@ import Live from './pages/Live'
 import Login from './pages/Login'
 import ForgotPassword from './pages/ForgotPassword'
 import { useAuth } from './components/SignIn-Components/AuthContext';
+import Profile from './pages/Profile'
 
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
   if (!isAuthReady) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background-dark">
-        <span className="material-symbols-outlined text-primary text-4xl animate-spin">progress_activity</span>
+        <span className="material-symbols-outlined text-primary text-4xl animate-spin"></span>
       </div>
     );
   }
@@ -27,6 +28,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/live" element={<Live />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </div>
   );

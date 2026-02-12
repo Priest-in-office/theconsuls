@@ -28,17 +28,17 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-async function authFetch(endpoint: string, body: object) {
-  const token = localStorage.getItem("token");
+async function authFetch(endpoint: string, options: { method?: string; body?: object } = {}) {
+  const { method = "POST", body = {} } = options;
 
   try {
     const response = await fetch(`${API_URL}${endpoint}`, {
-      method: "POST",
+      method,
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        ...(token && { Authorization: `Bearer ${token}` }),
       },
-      body: JSON.stringify(body),
+      ...(body && { body: JSON.stringify(body) }),
     });
 
     const data = await response.json();
@@ -50,7 +50,7 @@ async function authFetch(endpoint: string, body: object) {
     return data;
   } catch (err) {
     if (err instanceof TypeError && err.message === "Failed to fetch") {
-      throw new Error("Cannot connect to server. Check if your API is running.");
+      throw new Error("Cannot connect to server.");
     }
     throw err;
   }
@@ -63,20 +63,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthReady, setIsAuthReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+
+  // This useEffect checks if the user is already logged in to the page before anything
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem("token");
-      const savedEmail = localStorage.getItem("userEmail");
-
-      if (token && savedEmail) {
-        try {
-          setUser({ email: savedEmail })
-        } catch {
-          localStorage.removeItem("token");
-          localStorage.removeItem("userEmail");
-        }
+      try {
+        const data = await authFetch("/verify", { method: "GET" });
+        setUser(data.user);
+      } catch {
+        setUser(null);
+      } finally {
+        setIsAuthReady(true);
       }
-      setIsAuthReady(true);
     };
 
     checkAuth();
@@ -86,11 +84,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await authFetch("/login", { email, password });
-
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userEmail", email);
-      setUser({ email });
+      const data = await authFetch("/login", { body: { email, password } });
+      setUser(data.user);
     } catch (err) {
       const message = err instanceof Error ? err.message : "Invalid email or password";
       setError(message);
@@ -104,11 +99,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     setError(null);
     try {
-      await authFetch("/signup", {
+      await authFetch("/signup", { body: {
         fullname: data.name,
         email: data.email,
         password: data.password, 
         dob: data.dateOfBirth,
+        }
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to create account";
@@ -120,10 +116,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userEmail");
-    setUser(null);
+  const logout = async () => {
+    try {
+      await authFetch("/logout", { method: "POST" });
+    } catch {} finally {
+      setUser(null);
+      setError(null);
+    }
   };
 
   const clearError = () => setError(null);
