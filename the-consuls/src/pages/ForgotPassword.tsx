@@ -62,6 +62,13 @@ export default function ForgotPassword() {
     { password: { required: true, minLength: 8 }, confirmPassword: { required: true, match: "password" } }
   );
 
+  // Mask Email
+  const maskEmail = (email: string) => {
+    const [local, domain] = email.split("@");
+    const maskedLocal = local.length <= 6 ? local[0] + "*".repeat(local.length - 2) + local[local.length - 1] : local.slice(0, 3) + "*".repeat(local.length - 6) + local.slice(-3);
+    return `${maskedLocal}@${domain}`;
+  }
+
   // Email form validation
   const emailForm = useFormValidation(
     { email: "" },
@@ -167,7 +174,7 @@ export default function ForgotPassword() {
         {step === "email" 
           ? ""
           : step === "verification"
-            ? <>We've sent a 6-digit code to <span className="text-primary font-semibold">{userEmail}</span></>
+            ? <>We've sent a 6-digit code to <span className="text-primary font-semibold">{maskEmail(userEmail)}</span></>
             : "Enter your new password."
         }
       </p>
