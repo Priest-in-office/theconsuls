@@ -1,17 +1,66 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import AuthLayout from "../components/SignIn-Components/AuthLayout";
 import InputField from "../components/SignIn-Components/InputField";
 import SubmitButton from "../components/SignIn-Components/SubmitButton";
 import { useFormValidation } from "../components/SignIn-Components/FormValidation";
+const API_URL = import.meta.env.VITE_API_URL;
 
-type Step = "email" | "verification";
+type Step = "email" | "verification" | "reset";
+
+async function sendResetCode(email: string) {
+  const response = await fetch(`${API_URL}/password-recovery/forgot-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email }),
+  });
+  const data = await response.json();
+  if(!response.ok) {
+    throw new Error(data.message || "Failed to send reset code");
+  }
+}
+
+async function verifyCode(email: string, code: string) {
+  const response = await fetch(`${API_URL}/password-recovery/verify-code`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, code }),
+  });
+  const data = await response.json();
+  if(!response.ok) {
+    throw new Error(data.message || "Failed to verify code");
+  }
+}
+
+async function resetPassword(email: string, code: string, new_password: string) {
+  const response = await fetch(`${API_URL}/password-recovery/reset-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ email, code, new_password }),
+  });
+  const data = await response.json();
+  if(!response.ok) {
+    throw new Error(data.message || "Failed to reset password");
+  }
+}
 
 export default function ForgotPassword() {
   const [step, setStep] = useState<Step>("email");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState("");
+  const { values, errors, setValue, validate } = useFormValidation(
+    { password: "", confirmPassword: "" },
+    { password: { required: true, minLength: 8 }, confirmPassword: { required: true, match: "password" } }
+  );
 
   // Email form validation
   const emailForm = useFormValidation(
@@ -25,18 +74,18 @@ export default function ForgotPassword() {
     { code: { required: true, minLength: 6 } }
   );
 
+  useEffect(() => {
+    setError(null);
+    setMessage(null);
+  }, [step]);
+
   const handleEmailSubmit = async () => {
     if (emailForm.validate()) {
       setIsLoading(true);
       setError(null);
       
       try {
-        // TODO: Backend call to check if email exists and send code
-        // await checkEmailAndSendCode(emailForm.values.email);
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        await sendResetCode(emailForm.values.email);
         setUserEmail(emailForm.values.email);
         setStep("verification");
       } catch (err) {
@@ -53,14 +102,8 @@ export default function ForgotPassword() {
       setError(null);
       
       try {
-        // TODO: Backend call to verify code
-        // await verifyCode(userEmail, codeForm.values.code);
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // TODO: Navigate to reset password page or handle success
-        console.log("Code verified for:", userEmail);
+        await verifyCode(userEmail, codeForm.values.code);
+        setStep("reset");
       } catch (err) {
         setError("Invalid code. Please try again.");
       } finally {
@@ -69,16 +112,36 @@ export default function ForgotPassword() {
     }
   };
 
-  const handleResendCode = async () => {
+  const handleResetPassword = async () => {
+    const isValid = validate();
+
+    if (!isValid) return;
+
+    if (values.password !== values.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
     setIsLoading(true);
     setError(null);
     
     try {
-      // TODO: Backend call to resend code
-      // await resendCode(userEmail);
-      
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      // Show success message or toast
+      await resetPassword(userEmail, codeForm.values.code, values.password);
+      setMessage('Password reset successful. Redirecting to login...');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500);
+    } catch (err) {
+      setError("Failed to reset password. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleResendCode = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      await sendResetCode(userEmail);
     } catch (err) {
       setError("Failed to resend code. Please try again.");
     } finally {
@@ -91,23 +154,32 @@ export default function ForgotPassword() {
       title="Forgot Password?"
       subtitle={step === "email" 
         ? "No worries! Enter your email below and we'll send you a code to reset your password." 
-        : "Check your inbox for the verification code."}
+        : step === "verification"
+          ? "Check your inbox for the verification code."
+          : "Enter your new password."}
       badge="Password Recovery"
     >
       <h2 className="text-2xl font-bold text-[#111118] dark:text-white mb-2">
-        {step === "email" ? "" : "Enter Verification Code"}
+        {step === "email" ? "" : step === "verification" ? "Enter Verification Code" : "Reset Password"}
       </h2>
       
       <p className="text-[#60608a] dark:text-gray-400 text-sm mb-8">
         {step === "email" 
           ? ""
-          : <>We've sent a 6-digit code to <span className="text-primary font-semibold">{userEmail}</span></>
+          : step === "verification"
+            ? <>We've sent a 6-digit code to <span className="text-primary font-semibold">{userEmail}</span></>
+            : "Enter your new password."
         }
       </p>
 
       {error && (
         <div className="bg-red-500/10 text-red-500 px-4 py-3 rounded-xl mb-6 text-sm">
           {error}
+        </div>
+      )}
+      {message && (
+        <div className="bg-green-500/10 text-green-500 px-4 py-3 rounded-xl mb-6 text-sm">
+          {message}
         </div>
       )}
 
@@ -128,7 +200,7 @@ export default function ForgotPassword() {
             onClick={handleEmailSubmit} 
           />
         </>
-      ) : (
+      ) : step === "verification" ? (
         <>
           {/* Code Input Boxes */}
           <div className="mb-6">
@@ -176,19 +248,37 @@ export default function ForgotPassword() {
             }}
             className="w-full text-center text-[#60608a] dark:text-gray-400 text-sm font-medium hover:text-primary transition-colors"
           >
-            ← Use a different email
+            â† Use a different email
           </button>
         </>
-      )}
+      ) : step === "reset" ? (
+        <>
+          <InputField
+            label="Password"
+            type="password"
+            placeholder="At least 8 characters"
+            value={values.password as string}
+            onChange={(value) => setValue("password", value)}
+            error={errors.password}
+          />
+          
+          <InputField
+            label="Confirm Password"
+            type="password"
+            placeholder="Re-enter your password"
+            value={values.confirmPassword as string}
+            onChange={(value) => setValue("confirmPassword", value)}
+            error={errors.confirmPassword}
+          />
 
-      <div className="mt-8 pt-6 border-t border-[#dbdbe6] dark:border-gray-700">
-        <p className="text-center text-[#60608a] dark:text-gray-400 font-medium">
-          Remember your password?{" "}
-          <Link to="/login" className="text-primary font-bold hover:underline">
-            Sign In
-          </Link>
-        </p>
-      </div>
+          <SubmitButton 
+            text="Reset Password" 
+            isLoading={isLoading} 
+            onClick={handleResetPassword} 
+          />
+        </>
+      ) : null}
     </AuthLayout>
   );
 }
+

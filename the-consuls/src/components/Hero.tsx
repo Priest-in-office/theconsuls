@@ -10,7 +10,7 @@ export default function Hero() {
     if (user) {
       navigate('/live')
     } else {
-      navigate('/signup')
+      navigate('/login')
     }
   }
 
