@@ -6,16 +6,26 @@ import Live from './pages/Live'
 import Login from './pages/Login'
 import ForgotPassword from './pages/ForgotPassword'
 import { useAuth } from './components/SignIn-Components/AuthContext';
+import { useEffect, useState } from 'react';
 import Profile from './pages/Profile'
 
 
 function App() {
   const { isAuthReady } = useAuth();
+  const [pageLoading, setPageLoading] = useState(true);
 
-  if (!isAuthReady) {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPageLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!isAuthReady || pageLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background-dark">
-        <span className="material-symbols-outlined text-primary text-4xl animate-spin"></span>
+        <span className="material-symbols-outlined text-primary text-6xl animate-spin">donut_large</span>
       </div>
     );
   }
