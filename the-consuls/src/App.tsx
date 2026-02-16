@@ -7,7 +7,8 @@ import Login from './pages/Login'
 import ForgotPassword from './pages/ForgotPassword'
 import { useAuth } from './components/SignIn-Components/AuthContext';
 import { useEffect, useState } from 'react';
-import Profile from './pages/Profile'
+import Profile from './pages/Profile';
+import Groups from './pages/Groups';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/live" element={<Live />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/groups" element={<Groups />} />
       </Routes>
     </div>
   );

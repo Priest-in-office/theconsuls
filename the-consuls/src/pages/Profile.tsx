@@ -77,10 +77,11 @@ export default function Profile() {
           throw new Error("Failed to fetch profile data.");
         }
 
-        const data = (await response.json()) as Partial<ProfileData>;
+        const data = await response.json();
+        const userData = data.user;
         setProfile((prev) => ({
           ...prev,
-          ...data,
+          ...userData,
         }));
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unable to load profile data.";
@@ -180,7 +181,7 @@ export default function Profile() {
               <div className="mt-4 rounded-2xl border border-[#ececf4] bg-[#fafafe] p-4 dark:border-white/10 dark:bg-white/5">
                 <p className="text-xs font-semibold uppercase tracking-wide text-[#60608a] dark:text-gray-400">Bio</p>
                 <p className="mt-2 text-sm leading-relaxed text-[#1d1d31] dark:text-gray-200">
-                  {profile.bio || "This section is ready for biography text from your profile endpoint."}
+                  {profile.bio || "Not set"}
                 </p>
               </div>
             </>
