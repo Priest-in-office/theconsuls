@@ -26,20 +26,27 @@ interface AuthContextType {
   clearError: () => void;
 }
 
+
+
 const AuthContext = createContext<AuthContextType | null>(null);
 
 async function authFetch(endpoint: string, options: { method?: string; body?: object } = {}) {
-  const { method = "POST", body = {} } = options;
+  const { method = "POST", body } = options;
 
   try {
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    const fetchParam: RequestInit = {
       method,
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      ...(body && { body: JSON.stringify(body) }),
-    });
+    };
+
+    if(body && method !== "GET" && method !== "HEAD") {
+      fetchParam.body = JSON.stringify(body);
+    }
+
+    const response = await fetch(`${API_URL}${endpoint}`, fetchParam);
 
     const data = await response.json();
 
