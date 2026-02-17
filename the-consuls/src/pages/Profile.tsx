@@ -98,7 +98,7 @@ export default function Profile() {
 
   const handleLogout = async () => {
     await logout();
-    navigate("/home");
+    navigate("/");
   };
 
   return (
